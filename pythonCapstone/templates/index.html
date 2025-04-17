@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Disease Prediction</title>
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <header>
+      <a href="{{ url_for('first_page') }}">
+        <div class="logo">
+          <img src="/static/image/logo.jpeg" alt="Logo" />
+        </div>
+      </a>
+      
+
+      <nav class="main-nav">
+        <ul class="nav-links">
+          <li><a href="{{ url_for('first_page') }}">Home</a></li>
+          <li><a href="{{ url_for('about_us') }}">About Us</a></li>
+          <li><a href="#" class="active">Predict</a></li>
+          <li><a href="{{ url_for('contact_us') }}">Contact Us</a></li>
+          <li><a href="{{ url_for('user_dashboard') }}">Dashboard</a></li>
+        </ul>
+      </nav>
+
+      <nav class="auth-nav">
+        <ul class="auth-links">
+          {% if session.get('user_id') %}
+          <li class="user-info">
+            <span>{{ session.get('user_name') }}</span>
+            <img
+            src="/static/image/profile.jpg"
+            alt="User Profile"
+            class="profile-pic"
+          />
+          </li>
+          {% else %}
+          <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
+          <li><a href="{{ url_for('login') }}">Log In</a></li>
+          {% endif %}
+        </ul>
+      </nav>
+    </header>
+
+    <!-- Search bar and suggestions -->
+    <div class="search-container">
+      <input
+        type="text"
+        id="symptom-search"
+        placeholder="Search for symptoms..."
+      />
+      <button id="add-symptom-btn">Add Symptom</button>
+      <ul id="suggestions" class="suggestions-list"></ul>
+    </div>
+
+    <!-- Full-screen blur background -->
+    <div class="blur-background"></div>
+
+    <!-- Initial set of symptoms -->
+    <div id="initialSymptoms">
+      <h2>Select Symptoms from below</h2>
+      <form id="symptomForm">
+        <label
+          ><input type="checkbox" name="symptom" value="vomiting" />
+          Vomiting</label
+        ><br />
+        <label
+          ><input type="checkbox" name="symptom" value="fatigue" />
+          Fatigue</label
+        ><br />
+        <label
+          ><input type="checkbox" name="symptom" value="high_fever" /> High
+          Fever</label
+        ><br />
+        <label
+          ><input type="checkbox" name="symptom" value="chills" /> Chills</label
+        ><br />
+        <label
+          ><input type="checkbox" name="symptom" value="skin_rash" /> Skin
+          Rash</label
+        ><br />
+        <label
+          ><input type="checkbox" name="symptom" value="yellowish_skin" />
+          Yellowish Skin</label
+        ><br />
+        <label
+          ><input type="checkbox" name="symptom" value="joint_pain" /> Joint
+          Pain</label
+        ><br />
+        <label
+          ><input type="checkbox" name="symptom" value="itching" />
+          Itching</label
+        ><br />
+        <label
+          ><input type="checkbox" name="symptom" value="headache" />
+          Headache</label
+        ><br />
+        <label
+          ><input type="checkbox" name="symptom" value="weight_loss" /> Weight
+          Loss</label
+        ><br />
+        <button type="button" onclick="submitInitialSymptoms()">Next</button>
+      </form>
+    </div>
+
+ <!-- Container for both Selected Symptoms and Related Symptoms -->
+<div class="symptom-container">
+  
+  <!-- Dynamic set of symptoms (Related Symptoms Section) -->
+  <div id="relatedSymptoms" style="display: none">
+    <h2>Are you feeling these Symptoms?</h2>
+    <div id="dynamicSymptoms"></div>
+  </div>
+
+  <!-- Selected Symptoms Section (on the right side) -->
+  <div class="selected-symptoms-container" id="selected-symptoms-container" style="display: none;">
+    <h2>Selected Symptoms:</h2>
+    <ul id="selected-symptoms-list"></ul>
+  </div>
+
+</div>
+
+
+
+<div class="center-container">
+  <button type="button" class="predict-disease-btn" onclick="submitForm()">Predict Disease</button>
+</div>
+
+
+<div class="overlay" id="popupOverlay">
+  <div class="popup">
+    <h2 id="predictionResult">Prediction Result</h2>
+
+    <!-- Buttons to display further details -->
+    <div id="infoButtons" style="display: none">
+      <button onclick="showSection('general')">General Description</button>
+      <button onclick="showSection('technical')">Technical Description</button>
+      <button onclick="showSection('precautions')">Precautions</button>
+      <button onclick="showSection('medication')">Medication</button>
+      <button onclick="showSection('foodRecommendations')">
+        Food Recommendations
+      </button>
+    </div>
+
+    <!-- Sections for each type of information -->
+    <div id="general" class="info-section">
+      <h3>General Description</h3>
+      <p id="description1Result"></p>
+    </div>
+
+    <div id="technical" class="info-section">
+      <h3>Technical Description</h3>
+      <p id="description2Result"></p>
+    </div>
+
+    <div id="precautions" class="info-section">
+      <h3>Precautions</h3>
+      <p id="Precation1"></p>
+      <p id="Precation2"></p>
+      <p id="Precation3"></p>
+    </div>
+
+    <div id="medication" class="info-section">
+      <h3>Medication</h3>
+      <p id="medication"></p>
+    </div>
+
+    <div id="foodRecommendations" class="info-section">
+      <h3>Food Recommendations</h3>
+      <p id="foodToEat"></p>
+      <p id="foodToAvoid"></p>
+    </div>
+
+    <!-- Close button -->
+    <button onclick="closePopup()">Close</button>
+  </div>
+</div>
+
+
+    <script src="/static/script.js"></script>
+  </body>
+</html>

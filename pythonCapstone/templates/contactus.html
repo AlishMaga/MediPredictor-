@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us</title>
+    <link href="https://fonts.googleapis.com/css?family=Baloo+Bhai&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/contactus.css">
+</head>
+<body>
+    <header>
+      <a href="{{ url_for('first_page') }}">
+        <div class="logo">
+          <img src="/static/image/logo.jpeg" alt="Logo" />
+        </div>
+      </a>
+  
+        <nav class="main-nav">
+          <ul class="nav-links">
+            <li><a href="{{ url_for('first_page') }}">Home</a></li>
+            <li><a href="{{ url_for('about_us') }}">About Us</a></li>
+            <li><a href="{{ url_for('index') }}">Predict</a></li>
+            <li><a href="#" class="active">Contact Us</a></li>
+            <li><a href="{{ url_for('user_dashboard') }}">Dashboard</a></li>
+          </ul>
+        </nav>
+  
+        <nav class="auth-nav">
+          <ul class="auth-links">
+            {% if session.get('user_id') %}
+            <li class="user-info">
+              <span>{{ session.get('user_name') }}</span>
+              <img
+                src="/static/image/profile.jpg"
+                alt="User Profile"
+                class="profile-pic"
+              />
+              
+            </li>
+            
+            {% else %}
+            <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
+            <li><a href="{{ url_for('login') }}">Log In</a></li>
+            {% endif %}
+          </ul>
+        </nav>
+      </header>
+
+      <div class="container">
+  
+        <section class="contact-section">
+            <div class="contact-info">
+                <h2>Contact Us</h2>
+                <p>Feel free to contact us if you have any queries.</p>
+                <p><strong>Phone:</strong> 9843123456</p>
+                <p><strong>Email:</strong> support@company.com</p>
+               
+            </div>
+            <div class="contact-form">
+                <form>
+                    <div class="form-row">
+                        <input type="text" placeholder="First name" required>
+                        <input type="text" placeholder="Last name" required>
+                    </div>
+                    <input type="email" placeholder="Email" required>
+                    <div class="form-row">
+                
+                        <input type="tel" placeholder="Contact No: 9841234567">
+                    </div>
+                    <textarea placeholder="Leave us a message..." required></textarea>
+                    <button type="submit">Send Message</button>
+                </form>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

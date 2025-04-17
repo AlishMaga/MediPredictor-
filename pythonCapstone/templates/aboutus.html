@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us</title>
+    <link href="https://fonts.googleapis.com/css?family=Baloo+Bhai&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/aboutus.css">
+</head>
+<body>
+    <header>
+      <a href="{{ url_for('first_page') }}">
+        <div class="logo">
+          <img src="/static/image/logo.jpeg" alt="Logo" />
+        </div>
+      </a>
+  
+        <nav class="main-nav">
+          <ul class="nav-links">
+            <li><a href="{{ url_for('first_page') }}" active">Home</a></li>
+            <li><a href="#" class="active">About Us</a></li>
+            <li><a href="{{ url_for('index') }}">Predict</a></li>
+            <li><a href="{{ url_for('contact_us') }}">Contact Us</a></li>
+            <li><a href="{{ url_for('user_dashboard') }}">Dashboard</a></li>
+          </ul>
+        </nav>
+  
+        <nav class="auth-nav">
+          <ul class="auth-links">
+            {% if session.get('user_id') %}
+            <li class="user-info">
+              <span>{{ session.get('user_name') }}</span>
+              <img
+                src="/static/image/profile.jpg"
+                alt="User Profile"
+                class="profile-pic"
+              />
+              
+            </li>
+            {% else %}
+            <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
+            <li><a href="{{ url_for('login') }}">Log In</a></li>
+            {% endif %}
+          </ul>
+        </nav>
+      </header>
+
+    <!-- About Us Section -->
+<section class="about-us">
+  <h1>About MediPredictor</h1>
+  <p>
+    Welcome to MediPredictor—your partner in proactive health management. We combine cutting-edge machine learning with personalized insights to help you make informed health choices. Our platform offers disease predictions, tailored precautions, diet suggestions, and easy-to-understand health descriptions, all designed to empower your wellness journey.
+  </p>
+  <p>
+    With a focus on accessibility, privacy, and impactful information, we’re here to make health management simple, informative, and actionable. Join us as we transform the way you take care of your health—because your wellness matters.
+  </p>
+</section>
+
+<!-- Capabilities Section -->
+<section class="capabilities-heading">
+  <h2>Our Capabilities</h2>
+  <div class="capabilities">
+    <ul>
+      <li>Disease Prediction</li>
+      <li>Precautions</li>
+      <li>Disease Descriptions</li>
+      <li>Diet Suggestions</li>
+    </ul>
+  </div>
+</section>
+
+<!-- Team Section -->
+<section class="team-section">
+  <h2>Meet Our Team</h2>
+  <div class="team-members">
+    <div class="member">
+      <img src="/static/image/Alish.jpg" alt="Alish">
+      <h3>Alish Magaju</h3>
+      <p>Machine Learning Engineer</p>
+    </div>
+    <div class="member">
+      <img src="/static/image/subham.jpg" alt="Subham">
+      <h3>Subham Khadgi</h3>
+      <p>Front-End Developer</p>
+    </div>
+    <div class="member">
+      <img src="/static/image/subhod.jpg" alt="Subodh">
+      <h3>Subodh Karki</h3>
+      <p>Front-End Developer</p>
+    </div>
+    <div class="member">
+      <img src="/static/image/Anuu.jpg" alt="Anusha">
+      <h3>Anusha Bhattarai</h3>
+      <p>Back-End Developer</p>
+    </div>
+    <div class="member">
+      <img src="/static/image/smitri.jpg" alt="Smriti">
+      <h3>Smriti Bhattarai</h3>
+      <p>QA Tester</p>
+    </div>
+  </div>
+</section>
+
+<!-- Footer Section -->
+<footer>
+  <p>&copy; 2024 MediPredictor. All rights reserved.</p>
+</footer>
+
+
+</body>
+</html>

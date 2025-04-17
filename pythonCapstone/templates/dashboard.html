@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="/static/dashboard.css" />
+  </head>
+  <body>
+    <header>
+      <a href="{{ url_for('first_page') }}">
+        <div class="logo">
+          <img src="/static/image/logo.jpeg" alt="Logo" />
+        </div>
+      </a>
+
+      <nav class="main-nav">
+        <ul class="nav-links">
+          <li><a href="{{ url_for('first_page') }}">Home</a></li>
+          <li><a href="{{ url_for('about_us') }}">About Us</a></li>
+          <li><a href="{{ url_for('index') }}">Predict</a></li>
+          <li><a href="{{ url_for('contact_us') }}">Contact Us</a></li>
+          <li><a href="#" class="active">Dashboard</a></li>
+        </ul>
+      </nav>
+
+      <nav class="auth-nav">
+        <ul class="auth-links">
+          {% if session.get('user_id') %}
+          <li class="user-info">
+            <span>{{ session.get('user_name') }}</span>
+            <img
+              src="/static/image/profile.jpg"
+              alt="User Profile"
+              class="profile-pic"
+            />
+          </li>
+          {% else %}
+          <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
+          <li><a href="{{ url_for('signup') }}">Log In</a></li>
+          {% endif %}
+        </ul>
+      </nav>
+    </header>
+
+    <main class="container">
+      <section class="user-details">
+        <h2>User Details</h2>
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        <p><strong>Name:</strong> {{ user.name }}</p>
+        <img src="/static/image/profile.jpg" alt="Profile Picture" class="profile-pic2" />
+        
+        <!-- Single Edit Button to open modal -->
+        <button id="edit-button" class="edit-button">Edit</button>
+        <a href="{{ url_for('logout') }}" class="edit-button">Logout</a>
+      </section>
+      
+      <!-- Modal -->
+<div id="edit-modal" class="modal hidden">
+  <div class="modal-content">
+    <span id="close-modal" class="close-button">&times;</span>
+    <h3>Edit User Details</h3>
+
+    <!-- Edit Username Section -->
+    <form id="edit-username-form" method="POST" action="/update-username">
+      <label for="username">New Username:</label>
+      <input type="text" id="username" name="username" required />
+      <button type="submit" class="save-button">Save Username</button>
+    </form>
+
+    <!-- Edit Password Section -->
+    <form id="edit-password-form" method="POST" action="/update-password">
+      <label for="password">New Password:</label>
+      <input type="password" id="password" name="password" required />
+
+      <label for="confirm-password">Confirm Password:</label>
+      <input type="password" id="confirm-password" name="confirm-password" required />
+      <button type="submit" class="save-button">Save Password</button>
+    </form>
+  </div>
+</div>
+
+      
+
+      <!-- User Predictions Section -->
+      <section class="predictions">
+        <h2>Your Predictions</h2>
+        {% if predictions %}
+        <table>
+          <thead>
+            <tr>
+              <th>Symptoms</th>
+              <th>Predicted Disease</th>
+              <th>Prediction Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for prediction in predictions %}
+            <tr>
+              <td>{{ prediction[0] }}</td>
+              <!-- Symptoms -->
+              <td>{{ prediction[1] }}</td>
+              <!-- Predicted Disease -->
+              <td>{{ prediction[2] }}</td>
+              <!-- Prediction Date -->
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% else %}
+        <p>No predictions found. Make your first prediction!</p>
+        {% endif %}
+      </section>
+    </main>
+
+    <script src="/static/dashboard.js"></script>
+  </body>
+</html>

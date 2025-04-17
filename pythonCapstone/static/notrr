@@ -1,0 +1,169 @@
+const symptomList = [
+  //All symtomList
+];
+
+const relatedSymptoms = {
+  vomiting: [
+    "sweating",
+    "abdominal_pain",
+    "yellowish_skin",
+    "joint_pain",
+    "anxiety",
+  ],
+  fatigue: ["weight_loss", "lethargy", "cough", "restlessness", "mood_swings"],
+  high_fever: [
+    "chills",
+    "cough",
+    "extra_marital_contacts",
+    "patches_in_throat",
+    "muscle_wasting",
+  ],
+  chills: [
+    "continuous_sneezing",
+    "cough",
+    "high_fever",
+    "shivering",
+    "watering_from_eyes",
+  ],
+  skin_rash: [
+    "red_sore_around_nose",
+    "blister",
+    "silver_like_dusting",
+    "skin_peeling",
+    "scurring",
+  ],
+  yellowish_skin: [
+    "nausea",
+    "dark_urine",
+    "swelling_of_stomach",
+    "loss_of_appetite",
+    "joint_pain",
+  ],
+  joint_pain: [
+    "hip_joint_pain",
+    "knee_pain",
+    "silver_like_dusting",
+    "skin_peeling",
+    "dark_urine",
+  ],
+  itching: [
+    "lethargy",
+    "nodal_skin_eruptions",
+    "dischromic_patches",
+    "skin_rash",
+    "burning_micturition",
+  ],
+  headache: [
+    "blurred_and_distorted_vision",
+    "spinning_movements",
+    "altered_sensorium",
+    "weakness_of_one_body_side",
+    "loss_of_balance",
+  ],
+  weight_loss: [
+    "restlessness",
+    "fatigue",
+    "mood_swings",
+    "lethargy",
+    "irregular_sugar_level",
+  ],
+};
+
+// To store selected symptoms
+let selectedSymptoms = [];
+
+function submitInitialSymptoms() {
+  const form = document.getElementById("symptomForm");
+  const formData = new FormData(form);
+  const initialSelected = formData.getAll("symptom");
+
+  // Store the selected symptoms
+  selectedSymptoms = [...initialSelected];
+
+  // Hide initial symptoms and show related symptoms section
+  document.getElementById("initialSymptoms").style.display = "none";
+  document.getElementById("relatedSymptoms").style.display = "block";
+
+  // Get the next related symptoms based on selected ones
+  let relatedSet = new Set();
+  initialSelected.forEach((symptom) => {
+    if (relatedSymptoms[symptom]) {
+      relatedSymptoms[symptom].forEach((related) =>
+        relatedSet.add(related.trim())
+      );
+    }
+  });
+
+  // Display the related symptoms dynamically
+  const dynamicSymptomsDiv = document.getElementById("dynamicSymptoms");
+  relatedSet.forEach((symptom) => {
+    const label = document.createElement("label");
+    label.innerHTML = `<input type="checkbox" name="symptom" value="${symptom}" /> ${symptom}`;
+    dynamicSymptomsDiv.appendChild(label);
+    dynamicSymptomsDiv.appendChild(document.createElement("br"));
+  });
+}
+
+// List of symptoms for search recommendations
+const symptoms = [
+  "vomiting", "fatigue", "high_fever", "chills", "skin_rash", "yellowish_skin",
+  "joint_pain", "itching", "headache", "weight_loss", "cough", "fever", "nausea", "dizziness", 
+  "diarrhoea", "abdominal_pain"
+];
+
+const searchInput = document.getElementById('symptom-search');
+const suggestionsList = document.getElementById('suggestions');
+
+searchInput.addEventListener('input', function() {
+  const input = searchInput.value.toLowerCase();
+  suggestionsList.innerHTML = ''; // Clear previous suggestions
+
+  if (input) {
+      const filteredSymptoms = symptoms.filter(symptom => symptom.toLowerCase().includes(input));
+      filteredSymptoms.forEach(symptom => {
+          const li = document.createElement('li');
+          li.textContent = symptom;
+          li.addEventListener('click', function() {
+              searchInput.value = symptom;  // Set input value to the clicked symptom
+              suggestionsList.innerHTML = '';  // Clear suggestions list
+          });
+          suggestionsList.appendChild(li);
+      });
+  }
+});
+
+
+function submitForm() {
+  const form = document.getElementById("symptomForm");
+  const formData = new FormData(form);
+  const newSelected = formData.getAll("symptom");
+
+  // Combine initial and related selected symptoms
+  const finalSelectedSymptoms = [...selectedSymptoms, ...newSelected];
+
+  // Create a symptom array with 1 for selected symptoms
+  const symptomArray = symptomList.map((symptom) =>
+    finalSelectedSymptoms.includes(symptom) ? 1 : 0
+  );
+
+  // Send the array to the backend
+  fetch("/predict", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ symptoms: symptomArray }),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      document.getElementById(
+        "predictionResult"
+      ).innerText = `Predicted Disease: ${data.disease}`;
+      document.getElementById(
+        "descriptionResult"
+      ).innerText = `Description: ${data.description}`;
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+}
